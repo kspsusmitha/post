@@ -16,7 +16,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       LoginRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
-      final user = await loginUseCase(event.username, event.password);
+      final user = await loginUseCase.call(event.username, event.password);
       emit(AuthSuccess(user));
     } catch (e) {
       emit(AuthFailure(e.toString()));
