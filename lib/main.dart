@@ -1,35 +1,40 @@
-import 'package:clean_post/appliaction/bloc/auth_bloc.dart';
-import 'package:clean_post/appliaction/pages/login_page.dart';
+
 import 'package:clean_post/data/datasource/auth_remote_datasource.dart';
 import 'package:clean_post/data/repositories/auth_repository.dart';
-import 'package:clean_post/domain/usecases/login_usecases.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:clean_post/domain/usecases/login_usecase.dart';
+import 'package:clean_post/presentation/pages/login_page.dart';
+import 'package:clean_post/presentation/provider/login_provider.dart';
 import 'package:dio/dio.dart';
-
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   final dio = Dio();
-  final remoteDataSource = AuthRemoteDataSource(dio);
-  final authRepository = AuthRepositoryImpl(remoteDataSource);
-  final loginUseCase = LoginUseCase(authRepository);
 
-  runApp(MyApp(loginUseCase));
+  final dataSource = AuthRemoteDataSource(dio);
+  final repository = AuthRepositoryImpl(dataSource);
+  final loginUseCase = LoginUseCase(repository);
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => LoginProvider(loginUseCase),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  final LoginUseCase loginUseCase;
-
-  const MyApp(this.loginUseCase, {super.key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Clean Architecture Login',
-      home: BlocProvider(
-        create: (_) => AuthBloc(loginUseCase),
-        child: const LoginPage(),
-      ),
+      debugShowCheckedModeBanner: false,
+      home: LoginPage(),
     );
   }
 }

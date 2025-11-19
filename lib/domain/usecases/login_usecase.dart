@@ -1,4 +1,4 @@
-import 'package:clean_post/data/repositories/auth_repository.dart';
+  import 'package:clean_post/data/repositories/auth_repository.dart';
 import 'package:clean_post/domain/repositories/auth_repositories.dart';
 
 import '../entities/user.dart';

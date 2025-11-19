@@ -10,8 +10,8 @@ class AuthRemoteDataSource {
     final response = await dio.post(
       'https://dummyjson.com/auth/login',
       data: {
-        "username": username,
-        "password": password,
+        "username": username,//emilys
+        "password": password,//emilyspass
       },
      
     );
